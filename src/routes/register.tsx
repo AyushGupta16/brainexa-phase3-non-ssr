@@ -23,18 +23,11 @@ function RegisterPage() {
     phone: "",
     password: "",
     referralCode: "",
-    name: "",
-    email: "",
-    phone: "",
-    password: "",
-    referralCode: "",
   });
   const [error, setError] = useState("");
   const [notice, setNotice] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const f =
-    (field: keyof typeof form) => (e: React.ChangeEvent<HTMLInputElement>) =>
   const f =
     (field: keyof typeof form) => (e: React.ChangeEvent<HTMLInputElement>) =>
       setForm((prev) => ({ ...prev, [field]: e.target.value }));
@@ -54,7 +47,6 @@ function RegisterPage() {
         form.email,
         form.phone,
         form.password,
-        form.referralCode || undefined,
         form.referralCode || undefined,
       );
 
@@ -76,8 +68,6 @@ function RegisterPage() {
     } catch (err: unknown) {
       const message =
         err instanceof Error ? err.message : "Registration failed.";
-      const message =
-        err instanceof Error ? err.message : "Registration failed.";
       setError(message);
     } finally {
       setLoading(false);
@@ -97,12 +87,9 @@ function RegisterPage() {
             to="/login"
             className="text-xs text-muted-foreground hover:text-primary"
           >
-          <Link
-            to="/login"
-            className="text-xs text-muted-foreground hover:text-primary"
-          >
             ← Back to Login
           </Link>
+
           <div className="flex items-center gap-4">
             <Logo size="xl" />
             <CardTitle className="text-2xl">Create your account</CardTitle>
@@ -192,11 +179,6 @@ function RegisterPage() {
           {error && <p className="text-sm text-destructive">{error}</p>}
           {notice && <p className="text-sm text-emerald-600">{notice}</p>}
 
-          <Button
-            className="w-full"
-            onClick={handleRegister}
-            disabled={loading}
-          >
           <Button
             className="w-full"
             onClick={handleRegister}
