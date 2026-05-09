@@ -29,9 +29,7 @@ export function SectionHeading({
         <span
           className={cn(
             "inline-block rounded-full px-3 py-1 text-xs font-semibold uppercase tracking-wider",
-            inverted
-              ? "bg-gold/15 text-gold"
-              : "bg-primary/10 text-primary",
+            inverted ? "bg-gold/15 text-gold" : "bg-primary/10 text-primary",
           )}
         >
           {eyebrow}
