@@ -1,5 +1,5 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -21,24 +21,48 @@ function ResetPasswordPage() {
   const [error, setError] = useState("");
   const [notice, setNotice] = useState("");
   const [loading, setLoading] = useState(false);
+  const [sessionReady, setSessionReady] = useState(false);
 
-  const handleUpdatePassword = async () => {
-    if (loading) return;
+  useEffect(() => {
+    setError("");
 
-    if (!password || !confirmPassword) {
-      setError("Please enter and confirm your new password.");
-      return;
-    }
+    supabase.auth.getSession().then(({ data, error }) => {
+      if (error) {
+        setError(error.message);
+        return;
+      }
 
-    if (password !== confirmPassword) {
-      setError("Passwords do not match.");
-      return;
-    }
+      if (data.session) {
+        setSessionReady(true);
+      }
+    });
 
-    if (password.length < 6) {
-      setError("Password must be at least 6 characters.");
-      return;
-    }
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((event, session) => {
+      if (event === "PASSWORD_RECOVERY" || session) {
+        setSessionReady(true);
+        setError("");
+      }
+    });
+
+    const timeout = window.setTimeout(() => {
+      setSessionReady((ready) => {
+        if (!ready) {
+          setError(
+            "Password reset session was not found. Please request a fresh reset link.",
+          );
+        }
+
+        return ready;
+      });
+    }, 3000);
+
+    return () => {
+      subscription.unsubscribe();
+      window.clearTimeout(timeout);
+    };
+  }, []);
 
     setLoading(true);
     setError("");
@@ -126,9 +150,13 @@ function ResetPasswordPage() {
           <Button
             className="w-full"
             onClick={handleUpdatePassword}
-            disabled={loading}
+            disabled={loading || !sessionReady}
           >
-            {loading ? "Updating password..." : "Update Password"}
+            {loading
+              ? "Updating password..."
+              : !sessionReady
+                ? "Preparing reset session..."
+                : "Update Password"}
           </Button>
         </CardContent>
       </Card>
