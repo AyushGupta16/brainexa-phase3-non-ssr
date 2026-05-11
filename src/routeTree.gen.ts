@@ -14,6 +14,7 @@ import { Route as RegisterRouteImport } from './routes/register'
 import { Route as RefundRouteImport } from './routes/refund'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as LoginRouteImport } from './routes/login'
+import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
 import { Route as FaqRouteImport } from './routes/faq'
 import { Route as ContactRouteImport } from './routes/contact'
 import { Route as AboutRouteImport } from './routes/about'
@@ -62,6 +63,11 @@ const PrivacyRoute = PrivacyRouteImport.update({
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
   path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ForgotPasswordRoute = ForgotPasswordRouteImport.update({
+  id: '/forgot-password',
+  path: '/forgot-password',
   getParentRoute: () => rootRouteImport,
 } as any)
 const FaqRoute = FaqRouteImport.update({
@@ -190,6 +196,7 @@ export interface FileRoutesByFullPath {
   '/about': typeof AboutRoute
   '/contact': typeof ContactRoute
   '/faq': typeof FaqRoute
+  '/forgot-password': typeof ForgotPasswordRoute
   '/login': typeof LoginRoute
   '/privacy': typeof PrivacyRoute
   '/refund': typeof RefundRoute
@@ -221,6 +228,7 @@ export interface FileRoutesByTo {
   '/about': typeof AboutRoute
   '/contact': typeof ContactRoute
   '/faq': typeof FaqRoute
+  '/forgot-password': typeof ForgotPasswordRoute
   '/login': typeof LoginRoute
   '/privacy': typeof PrivacyRoute
   '/refund': typeof RefundRoute
@@ -253,6 +261,7 @@ export interface FileRoutesById {
   '/about': typeof AboutRoute
   '/contact': typeof ContactRoute
   '/faq': typeof FaqRoute
+  '/forgot-password': typeof ForgotPasswordRoute
   '/login': typeof LoginRoute
   '/privacy': typeof PrivacyRoute
   '/refund': typeof RefundRoute
@@ -286,6 +295,7 @@ export interface FileRouteTypes {
     | '/about'
     | '/contact'
     | '/faq'
+    | '/forgot-password'
     | '/login'
     | '/privacy'
     | '/refund'
@@ -317,6 +327,7 @@ export interface FileRouteTypes {
     | '/about'
     | '/contact'
     | '/faq'
+    | '/forgot-password'
     | '/login'
     | '/privacy'
     | '/refund'
@@ -348,6 +359,7 @@ export interface FileRouteTypes {
     | '/about'
     | '/contact'
     | '/faq'
+    | '/forgot-password'
     | '/login'
     | '/privacy'
     | '/refund'
@@ -380,6 +392,7 @@ export interface RootRouteChildren {
   AboutRoute: typeof AboutRoute
   ContactRoute: typeof ContactRoute
   FaqRoute: typeof FaqRoute
+  ForgotPasswordRoute: typeof ForgotPasswordRoute
   LoginRoute: typeof LoginRoute
   PrivacyRoute: typeof PrivacyRoute
   RefundRoute: typeof RefundRoute
@@ -442,6 +455,13 @@ declare module '@tanstack/react-router' {
       path: '/login'
       fullPath: '/login'
       preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/forgot-password': {
+      id: '/forgot-password'
+      path: '/forgot-password'
+      fullPath: '/forgot-password'
+      preLoaderRoute: typeof ForgotPasswordRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/faq': {
@@ -620,6 +640,7 @@ const rootRouteChildren: RootRouteChildren = {
   AboutRoute: AboutRoute,
   ContactRoute: ContactRoute,
   FaqRoute: FaqRoute,
+  ForgotPasswordRoute: ForgotPasswordRoute,
   LoginRoute: LoginRoute,
   PrivacyRoute: PrivacyRoute,
   RefundRoute: RefundRoute,
